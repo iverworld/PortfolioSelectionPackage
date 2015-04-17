@@ -14,7 +14,7 @@ get_roll_date <- function(days){
 #' Get instrument list.
 #' @return Instrument list.
 get_instrument_list <- function(group="all"){
-    t=read.csv("./config/instrument.cfg", sep=",", header=TRUE);
+    t=read.table("./config/instrument.cfg", sep=",", header=TRUE, stringsAsFactors=FALSE);
     if(group=="all")
     {
         return (t[,2]);    
