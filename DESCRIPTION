@@ -1,0 +1,9 @@
+Package: PortfolioSelectionPackage
+Type: Package
+Title: Generate functions for stock portfolio selection.
+Version: 1.0
+Date: 2015-04-08
+Author: Gavin Chan <gavincyi@gmail.com>
+Maintainer: Gavin Chan <gavincyi@gmail.com>
+Description: Select stocks from exchanges based on momentum strategy.
+License: GPL-2

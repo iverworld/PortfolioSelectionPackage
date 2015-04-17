@@ -1,0 +1,10 @@
+#exportPattern("^[[:alpha:]]+")
+export(get_roll_date)
+export(search_series)
+export(get_series)
+
+import("xts")
+import("zoo")
+import("Quandl")
+
+
