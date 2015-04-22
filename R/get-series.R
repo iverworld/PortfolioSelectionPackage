@@ -46,9 +46,10 @@ get_series_list <- function(group = "all", rolling_days, is_rdiff=FALSE){
     }
     else if (length(instruments) == 1)
     {
-        return (get_series(instruments[1], 
+        ret = get_series(instruments[1], 
                            get_roll_date(rolling_days), 
-                           is_rdiff));
+                           is_rdiff);
+        return (na_series_fill(ret, is_rdiff));
     }
     else
     {
@@ -64,6 +65,6 @@ get_series_list <- function(group = "all", rolling_days, is_rdiff=FALSE){
             ret = merge(ret, t, all = TRUE);
         }
         colnames(ret) = column_names;
-        return (ret);
+        return (na_series_fill(ret, is_rdiff));
     }
 }

@@ -23,3 +23,15 @@ get_instrument_list <- function(group="all"){
     }
     
 }
+
+#' Fill NA values in the series.
+#' @param series The series.
+#' @param is_rdiff Boolean, apply Quandl percentage difference transformation.
+na_series_fill <- function(series, is_rdiff){
+    if (is_rdiff)
+    {
+        return (na.fill(series, 0));
+    }else{
+        return (na.locf(series, 0));   
+    }
+}

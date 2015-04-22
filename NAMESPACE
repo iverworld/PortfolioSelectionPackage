@@ -1,9 +1,10 @@
 #exportPattern("^[[:alpha:]]+")
 export(get_roll_date)
 export(search_series)
-export(get_series)
 export(get_instrument_list)
+export(get_series)
 export(get_series_list)
+export(plot_standard)
 
 import("xts")
 import("zoo")
