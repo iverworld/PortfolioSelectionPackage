@@ -1,13 +1,18 @@
 #exportPattern("^[[:alpha:]]+")
 export(get_roll_date)
 export(search_series)
+export(get_instrument_dictionary)
 export(get_instrument_list)
 export(get_series)
 export(get_series_list)
+export(group)
 export(plot_standard)
 export(argmax)
 export(dateof)
 export(top_series)
+export(cum_return)
+
+#export(ordered_cum_series)
 
 import("xts")
 import("zoo")

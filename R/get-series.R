@@ -26,6 +26,7 @@ get_unmanaged_series <- function(series_name, from_date, is_rdiff=FALSE){
 #'@param is_rdiff Boolean, apply Quandl percentage difference transformation.
 #'@return A time series.
 get_series <- function(series_name, from_date, is_rdiff=FALSE){
+    print(sprintf("[%s][get_series]: Getting series %s...", Sys.time(), series_name));
     quandl_data = get_unmanaged_series(series_name, from_date, is_rdiff);
     header_quandl_data = colnames(quandl_data) %in% get_required_field_names();
     return (quandl_data[, header_quandl_data]);

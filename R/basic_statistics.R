@@ -20,22 +20,38 @@ dateof <- function(series, num_trading_days){
     }
 }
 
+#' Find the cumulative return of the series.
+#' @parma series The series.
+cum_return <- function(series, index=NULL){
+    if (is.null(index)){
+        return (exp(cumsum(diff(log(series))))-1);
+    } else {
+        return (exp(cumsum(diff(log(series))))-exp(cumsum(diff(log(index)))));
+    }
+}
+
+#' Find the ordered cumulative return of the series.
+#' @param series The series.
+#' @parma num_trading_days Number of trading days.
+ordered_cum_series <- function(series, num_trading_days){
+    num_row = length(index(series));
+    if (num_trading_days < num_row){
+        series = series[(num_row-num_trading_days):num_row];
+    }
+    core_end_cum = coredata(cum_return(series)[end(series)]);
+    ordered_end_cum = core_end_cum;
+    if(FALSE == is.null(nrow(ordered_end_cum))) {
+        ordered_end_cum = core_end_cum[, order(core_end_cum[1,], decreasing=TRUE)];
+    }
+    return (ordered_end_cum);
+}
 
 #' Find the stocks most returned.
 #' @param series            The series list.
 #' @param rank              The rank.
 #' @param num_trading_days  Number of trading days to extract from the series.
 top_series <- function(series, rank = 1, num_trading_days){
-    num_row = nrow(series);
-    if (num_trading_days < num_row){
-        series = series[(num_row-num_trading_days):num_row];
-    }
-    
-    start_data = coredata(series[start(series)]);
-    end_data = coredata(series[end(series)]);
-    
-    core_end_cum = (end_data - start_data)/start_data;
-    ordered_end_cum = core_end_cum[, order(core_end_cum[1,], decreasing=TRUE)];
+    ordered_end_cum = ordered_cum_series(series, num_trading_days);
     if (rank > 0){
         return (ordered_end_cum[1:rank]);
     } else {
