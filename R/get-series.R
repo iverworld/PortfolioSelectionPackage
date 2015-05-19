@@ -25,10 +25,15 @@ get_unmanaged_series <- function(series_name, from_date, is_rdiff=FALSE){
 #'@param from_date Start day.
 #'@param is_rdiff Boolean, apply Quandl percentage difference transformation.
 #'@return A time series.
-get_series <- function(series_name, from_date, is_rdiff=FALSE){
+get_series <- function(series_name, from_date, field_name = "", is_rdiff=FALSE){
     print(sprintf("[%s][get_series]: Getting series %s...", Sys.time(), series_name));
     quandl_data = get_unmanaged_series(series_name, from_date, is_rdiff);
-    header_quandl_data = colnames(quandl_data) %in% get_required_field_names();
+    required_field_names = get_required_field_names();
+    if (field_name != ""){
+        required_field_names = c("Date", field_name);
+    }
+    
+    header_quandl_data = colnames(quandl_data) %in% required_field_names;
     return (quandl_data[, header_quandl_data]);
 }
 
@@ -40,29 +45,33 @@ get_series <- function(series_name, from_date, is_rdiff=FALSE){
 #' @return List of time series.
 
 get_series_list <- function(group = "all", rolling_days, is_rdiff=FALSE){
-    instruments = get_instrument_list(group);
-    if (length(instruments) == 0)
+    instruments_dict = get_instrument_dictionary(group);
+    if (nrow(instruments_dict) == 0)
     {
         return (zoo());    
     }
-    else if (length(instruments) == 1)
+    else if (nrow(instruments_dict) == 1)
     {
-        ret = get_series(instruments[1], 
-                           get_roll_date(rolling_days), 
-                           is_rdiff);
+        ret = get_series(series_name = instruments_dict[1,2], 
+                         from_date = get_roll_date(rolling_days), 
+                         field_name = instruments_dict[1,3],
+                         is_rdiff = is_rdiff);
         return (na_series_fill(ret, is_rdiff));
     }
     else
     {
-        ret = get_series(instruments[1], 
-                       get_roll_date(rolling_days), 
-                       is_rdiff);
-        column_names = instruments;
-        instruments = instruments[-1];
-        for (instrument in instruments){
-            t = get_series(instrument, 
-                           get_roll_date(rolling_days),
-                           is_rdiff);
+        ret = get_series(series_name = instruments_dict[1,2], 
+                         from_date = get_roll_date(rolling_days), 
+                         field_name = instruments_dict[1,3],
+                         is_rdiff = is_rdiff);
+        column_names = instruments_dict[,2];
+        instruments_dict = instruments_dict[-1,];
+#         for (instrument in instruments_dict){
+        for (k in 1:nrow(instruments_dict)){
+            t = get_series(series_name = instruments_dict[k,2], 
+                           from_date = get_roll_date(rolling_days), 
+                           field_name = instruments_dict[k,3],
+                           is_rdiff = is_rdiff);
             ret = merge(ret, t, all = TRUE);
         }
         colnames(ret) = column_names;
