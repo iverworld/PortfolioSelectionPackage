@@ -1,3 +1,4 @@
+#' Set margin
 set_margin <- function(){
     par(mai=c(1.02,0.82,0.82,0.42));
 }
@@ -7,6 +8,7 @@ set_margin <- function(){
 #' @param is_legend Boolean, determine whether legend is needed.
 
 plot_standard <- function(series, is_legend=FALSE){
+    set_margin();
     size = length(series);
     plot(series,
          plot.type="single",
