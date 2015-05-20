@@ -12,9 +12,13 @@ get_roll_date <- function(days){
 }
 
 #' Get instrument dictionary.
-#' @return A table, first column the group and the second column the series code.
+#' @return A table, first column the group and the second column the series codes.
 get_instrument_dictionary <- function(group="all"){
-    t=read.table("./config/instrument.cfg", sep=",", header=TRUE, stringsAsFactors=FALSE);
+    t=read.table("./config/instrument.cfg", 
+                 quote="\"",
+                 sep=",", 
+                 header=TRUE, 
+                 stringsAsFactors=FALSE);
     t = t[substr(t[,1],1,1)!="#",];
     if (group=="all"){
         return (t);
@@ -26,7 +30,11 @@ get_instrument_dictionary <- function(group="all"){
 #' Get instrument list.
 #' @return Instrument list.
 get_instrument_list <- function(group="all"){
-    t=read.table("./config/instrument.cfg", sep=",", header=TRUE, stringsAsFactors=FALSE);
+    t=read.table("./config/instrument.cfg", 
+                 quote="\"",
+                 sep=",", 
+                 header=TRUE, 
+                 stringsAsFactors=FALSE);
     t = t[substr(t[,1],1,1)!="#",];
     if(group=="all")
     {
@@ -52,7 +60,18 @@ na_series_fill <- function(series, is_rdiff){
 #' Get the series in a specific group.
 #' @param series The series.
 #' @param group_name The group name.
+#' @return The series filtered by the group name.
 group <- function(series, group_name){
     id = get_instrument_dictionary();
     return(series[,id[id[,1]==group_name,2]]);
+}
+
+#' Get the description from the list of codes.
+#' @param codes The list of codes.
+#' @return The description of the codes.
+description <- function(codes){
+    id = get_instrument_dictionary();
+    id.found = id[,2] %in% codes;
+    id.final = id[id.found,c(2,4)];
+    return (id.final[!duplicated(id.final),]);
 }
