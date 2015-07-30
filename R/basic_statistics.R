@@ -55,7 +55,9 @@ ordered_cum_series <- function(series, num_trading_days, index=NULL){
 #' @param index             The index series. When index is input, the return is relative to the index return.
 top_series <- function(series, rank = 1, num_trading_days, index=NULL){
     ordered_end_cum = ordered_cum_series(series, num_trading_days, index);
-    if (rank > 0){
+    if (rank > length(ordered_end_cum)) {
+      return (ordered_end_cum);  
+    } else if (rank > 0){
         return (ordered_end_cum[1:rank]);
     } else {
         lengthOEC = length(ordered_end_cum);
