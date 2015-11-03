@@ -1,0 +1,44 @@
+---
+title: "run"
+output: html_document
+---
+
+First, get the series with prices in the past 365 days. 
+
+```{r}
+library(PortfolioSelectionPackage)
+series = get_series_list("all", 365);
+```
+
+Then call "top_series" to get the top returns relative to the benchmark. Try HSI as an example.
+
+```{r}
+rank = 10;
+num_of_trading_days = 220;
+tsHSI = top_series(group(series, "HSI"), rank, num_of_trading_days, group(series, "HS_INDEX"))
+tsHSI
+top_series(group(series, "HSI"), rank, 50, group(series, "HS_INDEX"))
+top_series(group(series, "HSI"), rank, 20, group(series, "HS_INDEX"))
+```
+
+Another for HHI.
+```{r}
+tsHHI = top_series(group(series, "HHI"), rank, num_of_trading_days, group(series, "A50_INDEX"))
+tsHHI
+top_series(group(series, "HHI"), rank, 50, group(series, "A50_INDEX"))
+top_series(group(series, "HHI"), rank, 20, group(series, "A50_INDEX"))
+```
+
+Then get the instrument name of the top 5 series. Plot the graph on them.
+```{r}
+tsHSI.names = names(tsHSI);
+tsHHI.names = names(tsHHI);
+
+plot_standard(series[,tsHSI.names], TRUE)
+plot_standard(series[,tsHHI.names], TRUE)
+
+```
+
+
+
+
